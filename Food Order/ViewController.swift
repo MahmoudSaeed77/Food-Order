@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController , UITextFieldDelegate {
     
     var topImageConstraints: [NSLayoutConstraint]!
     var bottomViewConstraints: [NSLayoutConstraint]!
@@ -153,6 +153,8 @@ class ViewController: UIViewController {
         
         addViews()
         setupConstraints()
+        emailTextfield.delegate = self
+        passwordTextfield.delegate = self
         
     }
     
@@ -309,3 +311,10 @@ class LeftPaddingTextFiewld: UITextField {
     }
 }
 
+    extension ViewController  {
+        func textFieldShouldReturn(_ scoreText: UITextField) -> Bool {
+            self.view.endEditing(true)
+            return true
+        }
+    }
+    

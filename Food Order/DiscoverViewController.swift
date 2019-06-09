@@ -12,6 +12,8 @@ class DiscoverViewController: UIViewController, UISearchBarDelegate {
     
     var itemArray = ["Bogy", "Doda", "Weza"]
     
+    let superView = UIView()
+    
     let searchBar: UISearchBar = {
         let bar = UISearchBar()
         bar.translatesAutoresizingMaskIntoConstraints = false
@@ -51,17 +53,46 @@ class DiscoverViewController: UIViewController, UISearchBarDelegate {
         return collection
     }()
     
+    
+    // pop up menu
+    
+    let popUpMenu:UIView = {
+        let menu = UIView()
+        menu.backgroundColor = UIColor.green
+        menu.layer.cornerRadius = 16
+        return menu
+    }()
+    
+    let resetBtn:UIButton = {
+        let btn = UIButton()
+        btn.frame.size = CGSize(width: 100, height: 40)
+        btn.backgroundColor = UIColor.red
+        btn.setTitle("Reset", for: UIControl.State.normal)
+        btn.setTitleColor(.white, for: .normal)
+        return btn
+    }()
+    
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        view.addSubview(topStack)
+        view.backgroundColor = .black
+        superView.frame = view.frame
+        superView.backgroundColor = .white
+        view.addSubview(superView)
+        superView.addSubview(topStack)
         topStack.addSubview(searchBar)
         topStack.addSubview(filterButton)
-        view.addSubview(discoverLabel)
-        view.addSubview(topCollectionView)
+        superView.addSubview(discoverLabel)
+        superView.addSubview(topCollectionView)
         searchBar.delegate = self
         searchBar.returnKeyType = UIReturnKeyType.done
+        setUpMenu()
         
+        
+        popUpMenu.frame = CGRect(x: 0 , y: self.view.frame.height , width: self.view.frame.width, height: self.view.frame.height * 0.6 )
+        filterButton.addTarget(self, action: #selector(filterButtonAction) , for: .touchUpInside)
         
         
         topStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
@@ -102,5 +133,28 @@ extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     
+    @objc func filterButtonAction () {
+        let screenHeight = self.view.frame.size.height
+        let menuHeight  = self.popUpMenu.frame.size.height
+        
+        UIView.animate(withDuration: 0.5 ) {
+            if self.popUpMenu.frame.origin.y < screenHeight {
+                self.popUpMenu.frame.origin.y += menuHeight
+                self.superView.alpha = 1
+            }
+            else {
+                self.popUpMenu.frame.origin.y -= menuHeight
+                self.superView.alpha = 0.4
+            }
+        }
+        
+    }
     
+    func  setUpMenu () {
+        
+        self.view.addSubview(popUpMenu)
+        popUpMenu.addSubview(resetBtn)
+        resetBtn.topAnchor.constraint(equalTo: popUpMenu.centerYAnchor , constant: 40).isActive = true
+        resetBtn.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant : -100).isActive = true
+    }
 }

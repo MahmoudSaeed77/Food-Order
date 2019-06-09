@@ -152,6 +152,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         addViews()
+        addTargets()
         setupConstraints()
         
     }
@@ -180,6 +181,10 @@ class ViewController: UIViewController {
         bottomView.addSubview(signupStack)
         signupStack.addSubview(signupLabel)
         signupStack.addSubview(signupButton)
+    }
+    
+    func addTargets(){
+        loginButton.addTarget(self, action: #selector(loginButtonAction), for: .touchUpInside)
     }
     
     
@@ -297,6 +302,12 @@ class ViewController: UIViewController {
         ]
         NSLayoutConstraint.activate(signupButtonConstraints)
     }
+    
+    
+    @objc func loginButtonAction(sender: UIButton){
+        let vc = AddingPhoneNumberViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
 
 }
 
@@ -306,6 +317,14 @@ class LeftPaddingTextFiewld: UITextField {
     }
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
         return CGRect(x: bounds.origin.x + 10, y: bounds.origin.y, width: bounds.width + 15, height: bounds.height)
+    }
+}
+
+
+extension ViewController  {
+    func textFieldShouldReturn(_ scoreText: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return true
     }
 }
 
